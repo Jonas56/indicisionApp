@@ -7,12 +7,12 @@ class Counter extends React.Component {
     this.handleReset = this.handleReset.bind(this);
     this.state = {
       count: 0,
-    }
+    };
   }
   handleAddOne() {
     this.setState((prevState) => {
       return {
-        count: prevState.count + 1
+        count: prevState.count + 1,
       };
     });
   }
@@ -20,19 +20,32 @@ class Counter extends React.Component {
     this.setState((prevState) => {
       if (prevState.count > 0) {
         return {
-          count: prevState.count - 1
+          count: prevState.count - 1,
         };
       }
-
     });
+    return;
   }
   handleReset() {
     this.setState(() => {
       return {
-        count: 0
+        count: 0,
       };
     });
   }
+  componentDidMount() {
+    const c = parseInt(localStorage.getItem("count"));
+    if (!isNaN(c)) {
+      this.setState(() => ({ count: c }));
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.count !== 0) {
+      const c = this.state.count;
+      localStorage.setItem("count", c);
+    }
+  }
+  componentWillUnmount() {}
   render() {
     return (
       <div>
@@ -41,20 +54,13 @@ class Counter extends React.Component {
         <button onClick={this.hadleMinusOne}>-1</button>
         <button onClick={this.handleReset}>Reset</button>
       </div>
-    )
+    );
   }
 }
 
-ReactDOM.render(<Counter />, document.getElementById('app'));
-
-
-
-
-
-
+ReactDOM.render(<Counter />, document.getElementById("app"));
 
 /**************************** JSX VERSION *****************************/
-
 
 // const appRoot = document.getElementById('app');
 
@@ -76,7 +82,6 @@ ReactDOM.render(<Counter />, document.getElementById('app'));
 //     count = 0;
 //     renderCountApp();
 // }
-
 
 // let count = 0;
 
